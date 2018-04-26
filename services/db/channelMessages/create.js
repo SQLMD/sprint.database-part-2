@@ -10,8 +10,7 @@ module.exports = (knex, ChannelMessage) => {
         channel_id: channelId,
         message,
       })
-      .returning("id")
-      .then((id) => {
+      .then(() => {
         return knex("channel_messages")
           .join("channels", "channel_messages.channel_id", "=", "channels.id")
           .join("users", "channel_messages.from_id", "=", "users.id")
@@ -22,11 +21,12 @@ module.exports = (knex, ChannelMessage) => {
             "message",
             "sent_at"
           )
-          .where("channel_messages.id", ...id);
+          .where("channels.id", channelId);
       })
-      .then((joinedChannelMessage) => {
-        // console.log(joinedChannelMessage);
-        return new ChannelMessage(joinedChannelMessage.pop());
+      .then((channelMessages) => {
+        return channelMessages.map((message) => {
+          return new ChannelMessage(message);
+        });
       });
   };
 };
