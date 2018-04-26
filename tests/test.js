@@ -140,7 +140,7 @@ describe("channels", () => {
   });
 });
 
-describe("channel_messages", () => {
+describe.only("channel_messages", () => {
   let fromId;
   let channelId;
   let otherChannelId;
@@ -175,14 +175,14 @@ describe("channel_messages", () => {
     it("creates a message", () =>
       db.channelMessages
         .create({ fromId, channelId, message })
-        .then((messages) => {
-          expect(messages[0]).to.include({
+        .then((message) => {
+          expect(message).to.include({
             fromUser: "rp-3",
             toChannel: "general",
             message,
           });
-          expect(messages[0].id).to.be.a("number");
-          expect(messages[0].sentAt).to.be.a("Date");
+          expect(message.id).to.be.a("number");
+          expect(message.sentAt).to.be.a("Date");
         }));
   });
 
