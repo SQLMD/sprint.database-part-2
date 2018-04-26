@@ -3,6 +3,7 @@ const { expect } = require("chai");
 const config = require("../config");
 const knex = require("knex")(config.db);
 const db = require("../services/db")(config.db);
+const Promise = require("bluebird");
 
 const forcePromiseReject = () => {
   throw new Error("This promise should have failed, but did not.");
@@ -140,7 +141,7 @@ describe("channels", () => {
   });
 });
 
-describe.only("channel_messages", () => {
+describe("channel_messages", () => {
   let fromId;
   let channelId;
   let otherChannelId;
@@ -176,7 +177,6 @@ describe.only("channel_messages", () => {
       db.channelMessages
         .create({ fromId, channelId, message })
         .then((messages) => {
-          console.log(messages[0]);
           expect(messages[0]).to.include({
             fromUser: "rp-3",
             toChannel: "general",
