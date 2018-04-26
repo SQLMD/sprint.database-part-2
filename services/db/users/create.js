@@ -1,3 +1,5 @@
+const Promise = require("bluebird");
+
 const validateUsername = (uName) =>
   typeof uName === "string" && uName.replace(" ", "").length > 2;
 

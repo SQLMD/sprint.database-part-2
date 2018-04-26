@@ -8,18 +8,18 @@ To roll back the migrations you just ran, you can use `knex migrate:rollback`
 
 exports.up = function(knex, Promise) {
   // create the 'users' table with three columns
-  return knex.schema.createTable("users", (t) => {
-    t
+  return knex.schema.createTable("users", (table) => {
+    table
       .increments() // auto-incrementing id column
       .index(); // index this column
 
-    t
+    table
       .string("username", 15) // maximum length of 15 characters
       .unique() // add a unique constraint to this column
       .notNullable() // add a not-null constraint to this column
       .index(); // index it
 
-    t
+    table
       .timestamp("created_at")
       .notNullable()
       .defaultTo(knex.fn.now()); // default to the current time
