@@ -88,6 +88,15 @@ describe("users", () => {
         expect(resp[0].serialize().username).to.be.a("string");
       }));
   });
+
+  describe("User.authenticate", () => {
+    const testUser = { username: "alex", password: "ilovesql" };
+    db.users.create(testUser).then((user) => {
+      expect(user.authenticate).to.be.a("function");
+      expect(user.authenticate(testUser.password)).to.be.true;
+      expect(user.authenticate("ihatesql")).to.be.false;
+    });
+  });
 });
 
 describe("channels", () => {
