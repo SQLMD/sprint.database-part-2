@@ -1,4 +1,5 @@
 const Promise = require("bluebird");
+const bcrypt = require("bcrypt");
 
 const validateUsername = (uName) =>
   typeof uName === "string" && uName.replace(" ", "").length > 2;
@@ -7,7 +8,7 @@ module.exports = (knex, User) => {
   return (params) => {
     const username = params.username;
     const password = params.password;
-
+    const SALTROUNDS = 11;
     return Promise.try(() => {
       if (!validateUsername(username))
         throw new Error(
@@ -17,8 +18,14 @@ module.exports = (knex, User) => {
         throw new Error("Password must be provided.");
       }
     })
-      .then(() =>
-        knex("users").insert({ username: username.toLowerCase(), password })
+      .then(() => {
+        return bcrypt.hash(password, SALTROUNDS);
+      })
+      .then((hash) =>
+        knex("users").insert({
+          username: username.toLowerCase(),
+          password: hash,
+        })
       )
       .then(() => {
         return knex("users")
