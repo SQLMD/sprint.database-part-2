@@ -96,6 +96,7 @@ describe("users", () => {
       expect(user.authenticate(testUser.password)).to.be.true;
       expect(user.authenticate("ihatesql")).to.be.false;
     });
+    knex("users").del();
   });
 });
 
