@@ -20,7 +20,7 @@ module.exports = (knex, UserMessage) => {
         "user_messages.from_id": toId,
         "user_messages.to_id": fromId,
       })
-
+      .orderBy("sent_at")
       .then((userMessages) => {
         return userMessages.map((message) => {
           return new UserMessage(message);

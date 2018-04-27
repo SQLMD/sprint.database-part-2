@@ -13,6 +13,7 @@ module.exports = (knex, ChannelMessage) => {
         "sent_at"
       )
       .where("channels.id", channelId)
+      .orderBy("sent_at")
       .then((channelMessages) => {
         return channelMessages.map((message) => {
           return new ChannelMessage(message);
