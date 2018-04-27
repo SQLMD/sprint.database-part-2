@@ -8,6 +8,15 @@ const Promise = require("bluebird");
 const forcePromiseReject = () => {
   throw new Error("This promise should have failed, but did not.");
 };
+after(() => {
+  return knex
+    .raw("ALTER SEQUENCE users_id_seq RESTART WITH 1;")
+    .then(() => knex.raw("ALTER SEQUENCE channels_id_seq RESTART WITH 1;"))
+    .then(() => knex.raw("ALTER SEQUENCE user_messages_id_seq RESTART WITH 1;"))
+    .then(() =>
+      knex.raw("ALTER SEQUENCE channel_messages_id_seq RESTART WITH 1;")
+    );
+});
 
 describe("users", () => {
   describe("setup", () => {
@@ -188,6 +197,7 @@ describe("channel_messages", () => {
     knex("channel_messages")
       .del()
       .then(() => knex("users").del())
+      .then(() => knex("channels").del())
   );
 
   describe("#create", () => {
