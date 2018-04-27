@@ -1,16 +1,18 @@
 const moment = require("moment");
 
-const Channel = function(dbChannel) {
-  this.id = dbChannel.id;
-  this.name = dbChannel.name;
-};
+class Channel {
+  constructor(dbChannel) {
+    this.id = dbChannel.id;
+    this.name = dbChannel.name;
+  }
 
-Channel.prototype.serialize = function() {
-  return {
-    id: this.id,
-    name: this.name,
-  };
-};
+  serialize() {
+    return {
+      id: this.id,
+      name: this.name,
+    };
+  }
+}
 
 module.exports = (knex) => {
   return {

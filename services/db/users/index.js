@@ -1,22 +1,25 @@
 const moment = require("moment");
 
-const User = function(dbUser) {
-  this.id = dbUser.id;
-  this.username = dbUser.username;
-  this.createdAt = new Date(dbUser.created_at);
-  this.password = dbUser.password;
-};
+class User {
+  constructor(dbUser) {
+    this.id = dbUser.id;
+    this.username = dbUser.username;
+    this.createdAt = new Date(dbUser.created_at);
+    this.password = dbUser.password;
+  }
 
-User.prototype.serialize = function() {
-  // we use a serializer to format the object and
-  // clean out any information that shouldn't be
-  // sent to the client, like passwords, for example.
-  return {
-    id: this.id,
-    username: this.username,
-    createdAt: moment(this.createdAt).format("hh:mm:ss"),
-  };
-};
+  serialize() {
+    return {
+      id: this.id,
+      username: this.username,
+      createdAt: moment(this.createdAt).format("hh:mm:ss"),
+    };
+  }
+
+  authenticate(password) {
+    return this.password === password;
+  }
+}
 
 module.exports = (knex) => {
   return {
