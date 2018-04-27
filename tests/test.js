@@ -18,7 +18,7 @@ describe("users", () => {
   });
 
   describe("#create", () => {
-    let params = { username: "" };
+    let params = { username: "", password: "" };
 
     context("when bad params are given", () => {
       before(() => {
@@ -39,6 +39,7 @@ describe("users", () => {
     context("when good params are given", () => {
       before(() => {
         params.username = "rp-3";
+        params.password = "1234";
       });
 
       afterEach(() => knex("users").del()); // delete all users after each spec
@@ -65,7 +66,12 @@ describe("users", () => {
 
   describe("#list", () => {
     const usernames = ["rp-3", "muddybarefeet"];
-    const users = usernames.map((username) => ({ username }));
+    const passwords = ["password", "1234"];
+    const users = usernames.map((username, index) => ({
+      username,
+      password: passwords[index],
+    }));
+
     before(() => Promise.all(users.map(db.users.create)));
     after(() => knex("users").del());
 
@@ -149,7 +155,7 @@ describe("channel_messages", () => {
 
   before(() =>
     db.users
-      .create({ username: "rp-3" })
+      .create({ username: "rp-3", password: "1234" })
       .then((user) => {
         fromId = user.id;
         return db.channels.create({ name: "general" });
@@ -237,14 +243,14 @@ describe("user_messages", () => {
 
   before(() =>
     db.users
-      .create({ username: "rp-3" })
+      .create({ username: "rp-3", password: "password" })
       .then((user) => {
         fromId = user.id;
-        return db.users.create({ username: "muddybarefeet" });
+        return db.users.create({ username: "muddybarefeet", password: "test" });
       })
       .then((user) => {
         toId = user.id;
-        return db.users.create({ username: "yanarchy" });
+        return db.users.create({ username: "yanarchy", password: "0987" });
       })
       .then((user) => {
         otherToId = user.id;

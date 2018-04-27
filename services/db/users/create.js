@@ -6,14 +6,20 @@ const validateUsername = (uName) =>
 module.exports = (knex, User) => {
   return (params) => {
     const username = params.username;
+    const password = params.password;
 
     return Promise.try(() => {
       if (!validateUsername(username))
         throw new Error(
           "Username must be provided, and be at least two characters"
         );
+      if (!password) {
+        throw new Error("Password must be provided.");
+      }
     })
-      .then(() => knex("users").insert({ username: username.toLowerCase() }))
+      .then(() =>
+        knex("users").insert({ username: username.toLowerCase(), password })
+      )
       .then(() => {
         return knex("users")
           .where({ username: username.toLowerCase() })

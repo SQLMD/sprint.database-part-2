@@ -4,6 +4,7 @@ const User = function(dbUser) {
   this.id = dbUser.id;
   this.username = dbUser.username;
   this.createdAt = new Date(dbUser.created_at);
+  this.password = dbUser.password;
 };
 
 User.prototype.serialize = function() {
