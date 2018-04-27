@@ -1,11 +1,12 @@
 const moment = require("moment");
+const bcrypt = require("bcrypt");
 
 class User {
   constructor(dbUser) {
     this.id = dbUser.id;
     this.username = dbUser.username;
     this.createdAt = new Date(dbUser.created_at);
-    this.password = dbUser.password;
+    this.hash = dbUser.password;
   }
 
   serialize() {
@@ -17,7 +18,7 @@ class User {
   }
 
   authenticate(password) {
-    return this.password === password;
+    return bcrypt.compare(password, this.hash);
   }
 }
 

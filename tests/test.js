@@ -93,8 +93,12 @@ describe("users", () => {
     const testUser = { username: "alex", password: "ilovesql" };
     db.users.create(testUser).then((user) => {
       expect(user.authenticate).to.be.a("function");
-      expect(user.authenticate(testUser.password)).to.be.true;
-      expect(user.authenticate("ihatesql")).to.be.false;
+      user.authenticate(testUser.password).then((isAuthenticated) => {
+        expect(isAuthenticated).to.be.true;
+      });
+      user.authenticate("ihatesql").then((isAuthenticated) => {
+        expect(isAuthenticated).to.be.false;
+      });
     });
     knex("users").del();
   });
